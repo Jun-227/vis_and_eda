@@ -1,0 +1,132 @@
+---
+title: "visualization_ ggplot1"
+author: "Jun"
+date: "9/28/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(ggridges)
+```
+
+## create the weather data
+
+
+```{r load_data, cache=TRUE}
+weather_df = 
+  rnoaa::meteo_pull_monitors(c("USW00094728", "USC00519397", "USS0023B17S"),
+                      var = c("PRCP", "TMIN", "TMAX"), 
+                      date_min = "2017-01-01",
+                      date_max = "2017-12-31") %>%
+  mutate(
+    name = recode(id, USW00094728 = "CentralPark_NY", 
+                      USC00519397 = "Waikiki_HA",
+                      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+
+
+## create a ggplot
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax))
+ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point()
+
+```
+
+alternate way of making this plot
+
+```{r}
+weather_df %>%
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point()
+```
+
+saving initial plots(mostly I don't use this)
+
+```{r}
+scatterplot = weather_df %>%
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point()
+scatterplot
+```
+
+adding color....
+
+```{r}
+weather_df %>%
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .4)
+#alpha means transparency
+```
+
+why do `aes` positions matter?
+first
+```{r}
+weather_df %>%
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = .4)+geom_smooth(se = FALSE)
+```
+
+vs
+
+```{r}
+weather_df %>%
+  ggplot(aes(x = tmin, y = tmax, color = name))+ 
+  geom_point(alpha = .4) + geom_smooth(se = FALSE)
+```
+
+facets
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5) +
+  geom_smooth(se = FALSE) + 
+  facet_grid(~ name)
+```
+
+this is fine, but not interesting
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_point(aes(size = prcp), alpha=.5) + 
+  geom_smooth(size = 2, se = FALSE) +
+  facet_grid(~name)
+```
+```{r}
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  mutate(tmax_fahr = tmax * (9 / 5) + 32,
+         tmin_fahr = tmin * (9 / 5) + 32) %>% 
+  ggplot(aes(x = tmin_fahr, y = tmax_fahr)) +
+  geom_point(alpha = .5) + 
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+
+## some extra stuff
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
