@@ -184,3 +184,127 @@ weather_df %>%
 ![](vis_and_eda_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ## some extra stuff
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) + 
+  geom_smooth(size = 2, se = FALSE)
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+![](vis_and_eda_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+2d density
+
+``` r
+#install.packages("hexbin")
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_hex() + facet_grid(~name)
+```
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_binhex).
+
+![](vis_and_eda_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+## More kinds of plots
+
+univariate plots
+
+``` r
+weather_df %>% 
+ggplot(aes(x = tmax, fill = name)) + 
+  geom_histogram() +
+  facet_grid(~name)
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_bin).
+
+![](vis_and_eda_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+#color gives the outside lines around bars
+#"dodge" rearrange the bar
+ggplot(weather_df, aes(x = tmax, fill = name)) + 
+  geom_histogram(position = "dodge", binwidth = 2)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_bin).
+
+![](vis_and_eda_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+
+density plot
+
+``` r
+weather_df %>% 
+ggplot(aes(x = tmax, fill = name)) + 
+  geom_density(alpha = .4, adjust = .5, color = "blue")
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_density).
+
+![](vis_and_eda_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+univariate plot —
+    boxplots
+
+``` r
+ggplot(weather_df, aes(x = name, y = tmax)) + geom_boxplot()
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_boxplot).
+
+![](vis_and_eda_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+violin plots (have density plot)
+
+``` r
+ggplot(weather_df, aes(x = name, y = tmax)) + 
+  geom_violin(aes(fill = name), color = "blue", alpha = .5) + 
+  stat_summary(fun.y = median, geom = "point", color = "blue", size = 4)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_summary).
+
+![](vis_and_eda_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+ridge plots\! useful for lots of groups
+
+``` r
+ggplot(weather_df, aes(x = tmax, y = name)) + 
+  geom_density_ridges(scale = .85)
+```
+
+    ## Picking joint bandwidth of 1.84
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_density_ridges).
+
+![](vis_and_eda_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+save image
+
+``` r
+#weather_plot = ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+#  geom_point(aes(color = name), alpha = .5) 
+
+#ggsave("weather_plot.pdf", weather_plot, width = 8, height = 5)
+```
+
+``` r
+#knitr::opts_chunk$set(
+#  fig.width = 6,
+#  fig.asp = .6,
+#  out.width = "90%")
+```
+
+``` r
+#ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+#  geom_point(aes(color = name))
+```
