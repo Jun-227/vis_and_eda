@@ -291,17 +291,34 @@ ggplot(weather_df, aes(x = tmax, y = name)) +
 save image
 
 ``` r
-#weather_plot = ggplot(weather_df, aes(x = tmin, y = tmax)) + 
-#  geom_point(aes(color = name), alpha = .5) 
+weather_plot = ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+ geom_point(aes(color = name), alpha = .5) 
 
-#ggsave("weather_plot.pdf", weather_plot, width = 8, height = 5)
+ggsave("weather_plot.pdf", weather_plot, width = 8, height = 5)
 ```
 
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
 ``` r
-#knitr::opts_chunk$set(
-#  fig.width = 6,
-#  fig.asp = .6,
-#  out.width = "90%")
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha=.4) +
+  geom_smooth(se = FALSE)
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](vis_and_eda_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+``` r
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%")
 ```
 
 ``` r
